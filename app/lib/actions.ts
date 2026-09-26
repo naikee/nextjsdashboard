@@ -9,7 +9,7 @@ import { z } from "zod";
 
 const sql = postgres(process.env.POSTGRES_URL!, {ssl: 'require'});
 
-const FormSchema = z.object({
+const InvoiceFormSchema = z.object({
     id : z.string(),
     customerId : z.string({
         invalid_type_error: 'Please select a customer.',
@@ -19,7 +19,7 @@ const FormSchema = z.object({
     date: z.string()
 });
 
-const CreateInvoice = FormSchema.omit({ id: true, date: true });
+const CreateInvoice = InvoiceFormSchema.omit({ id: true, date: true });
 
 export type State = {
   errors?: {
@@ -70,7 +70,7 @@ export async function createInvoice(prevSate: State, formData: FormData) {
     redirect('/dashboard/invoices');
 }
 
-const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+const UpdateInvoice = InvoiceFormSchema.omit({ id: true, date: true });
 
 export async function updateInvoice(id: string, prevSate: State, formData: FormData) {
     const validatedFields = UpdateInvoice.safeParse({
@@ -139,3 +139,5 @@ export async function authenticate(
 export async function signOutFxn() {
     await signOut({redirectTo: '/'});
 }
+
+const CustomerFormSchema = z.object({ });
